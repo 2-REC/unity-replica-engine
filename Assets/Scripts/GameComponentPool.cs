@@ -30,9 +30,21 @@ namespace ReplicaEngine {
         }
         */
 
+        // TODO: design flaw... => Fill should not be called twice!
+        protected override void Fill() {
+            if (entityClass == null)
+                return;
+
+            base.Fill();
+        }
+
         // TODO: 'object' ok? (if not, try with 'GameComponent' and see about derived classes)
         protected override object CreateItem() {
-            return Activator.CreateInstance(entityClass);
+            //return Activator.CreateInstance(entityClass);
+            GameComponent instance = new() {
+                componentType = entityClass
+            };
+            return instance;
         }
 
     }

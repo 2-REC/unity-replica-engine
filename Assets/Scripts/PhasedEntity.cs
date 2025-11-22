@@ -3,6 +3,45 @@
  * entities within the manager will be updated by phase.
  */
 
+/*
+//using UnityEngine;
+
+namespace ReplicaEngine {
+
+    public class PhasedEntity : BaseEntity {
+
+        private GameComponent gameComponent;
+
+        // TODO: make read-only property? (if no impact on perf)
+        // TODO: initial value?
+        public int phase;
+
+
+        // TODO: make sure it calls base ctor
+        public PhasedEntity() {}
+
+        // TODO: ?
+        public void SetComponent(GameComponent gameComponent) {
+            this.gameComponent = gameComponent;
+        }
+
+        public void SetPhase(int phaseValue) {
+            phase = phaseValue;
+        }
+
+        public override void Reset() {
+            gameComponent.Reset();
+        }
+
+        public override void CustomUpdate(float timeDelta, BaseEntity parent) {
+            gameComponent.CustomUpdate(timeDelta, parent);
+        }
+
+    }
+
+}
+*/
+
 //using UnityEngine;
 
 namespace ReplicaEngine {
@@ -15,22 +54,7 @@ namespace ReplicaEngine {
 
 
         // TODO: make sure it calls base ctor
-        public PhasedEntity() {}
-        /*
-        protected override void Awake() {
-            base.Awake();
-        }
-        */
-        /*
-        protected override void Init() {
-            base.Init();
-        }
-        public static new PhasedEntity Create(GameObject targetObject) {
-            PhasedEntity phasedEntity = targetObject.AddComponent<PhasedEntity>();
-            phasedEntity.Init();
-            return phasedEntity;
-        }
-        */
+        public PhasedEntity() { }
 
         public override void Reset() {}
 

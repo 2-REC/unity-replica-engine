@@ -1,6 +1,7 @@
 /* TEntityPool is a generic version of EntityPool that automatically casts to type T on allocation.
  */
 
+using System;
 using System.Collections.Generic;
 
 // TODO: need to be derived from BaseObject!?!?
@@ -44,9 +45,8 @@ namespace ReplicaEngine {
 
         public T Allocate() {
             if (_pool.Count == 0) {
-                //Exception
-                //$"Entity pool of type {GetType().FullName} exhausted!!"
-                return null; // remove
+                // TODO: type?
+                throw new Exception($"Entity pool of type {GetType().Name} exhausted!");
             }
 
             T item = _pool.Pop();
@@ -85,7 +85,7 @@ namespace ReplicaEngine {
         }
 
         // TODO: CHECK!
-        protected void Fill() {
+        protected virtual void Fill() {
             Clear();
             for (int i = 0; i < _size; i++) {
                 // TODO: ok? (if not, check 'T CreateItem', and 'GameComponent' type in derived class)

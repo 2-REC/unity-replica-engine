@@ -11,7 +11,8 @@
 namespace ReplicaEngine {
 
     //public abstract class BaseEntity : MonoBehaviour {
-    public abstract class BaseEntity {
+    //public abstract class BaseEntity {
+    public abstract class BaseEntity : IUpdatable {
         // TODO: OK for making sure it's a singleton?
         readonly static public SystemRegistry systemRegistry = new();
 

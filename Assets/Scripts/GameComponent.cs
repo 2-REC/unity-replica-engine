@@ -4,11 +4,68 @@
  * Note that a game entity may contain more than one instance of the same type of component.
  */
 
-//using UnityEngine;
+/*
+using UnityEngine;
 
 namespace ReplicaEngine {
 
-    public abstract class GameComponent : PhasedEntity {
+    //public abstract class GameComponent : PhasedEntity {
+    public abstract class GameComponent : MonoBehaviour {
+
+        // defines high-level buckets within which components may choose to run
+        public enum ComponentPhases {
+            THINK,                  // decisions are made
+            PHYSICS,                // impulse velocities are summed
+            POST_PHYSICS,           // inertia, friction, and bounce
+            MOVEMENT,               // position is updated
+            COLLISION_DETECTION,    // intersections are detected
+            COLLISION_RESPONSE,     // intersections are resolved
+            POST_COLLISION,         // position is now final for the frame
+            ANIMATION,              // animations are selected
+            PRE_DRAW,               // drawing state is initialized
+            DRAW,                   // drawing commands are scheduled
+            FRAME_END,              // final cleanup before the next update
+        }
+
+        public bool shared;
+        // TODO: protected?
+        protected PhasedEntity phasedEntity;
+
+
+        protected virtual void Awake() {
+            shared = false;
+
+            // TODO: get GameComponent here? (should be allocated at same time as this)
+            // + need to link both ways... phasedEntity.SetComponent(this)
+            // ... more?
+
+        }
+
+        public void SetPhase(int phaseValue) {
+            phasedEntity.SetPhase(phaseValue);
+        }
+
+        public abstract void Reset();
+
+        // TODO: ok?
+        public virtual void CustomUpdate(float timeDelta, BaseEntity parent) { }
+
+    }
+
+}
+*/
+
+using System;
+using UnityEngine;
+
+namespace ReplicaEngine {
+
+    //public abstract class GameComponent : PhasedEntity {
+    public class GameComponent : PhasedEntity {
+
+        private GameComponentBridge implementedComponent;
+
+        public Type componentType;
 
         // defines high-level buckets within which components may choose to run
         public enum ComponentPhases {
@@ -28,27 +85,33 @@ namespace ReplicaEngine {
         public bool shared;
 
 
-        // TODO: make sure it calls base ctor
-        public GameComponent() {
+        protected virtual void Awake() {
             shared = false;
+
+            // TODO: get GameComponent here? (should be allocated at same time as this)
+            // + need to link both ways... phasedEntity.SetComponent(this)
+            // ... more?
+
         }
-        /*
-        protected override void Awake() {
-            // TODO: needed? (doesn't do anything)
-            //base.Awake();
-            shared = false;
+
+        //public abstract void Reset();
+        public override void Reset() {
+            implementedComponent.Reset();
         }
-        */
-        /*
-        protected override void Init() {
-            base.Init();
+
+
+        // TODO: ok?
+        //public virtual void CustomUpdate(float timeDelta, BaseEntity parent) { }
+        public override void CustomUpdate(float timeDelta, BaseEntity parent) {
+            implementedComponent.CustomUpdate(timeDelta, parent);
         }
-        public static new GameComponent Create(GameObject targetObject) {
-            GameComponent gameComponent = targetObject.AddComponent<GameComponent>();
-            gameComponent.Init();
-            return gameComponent;
+
+        // TODO: change name!
+        public void SetComponent(GameComponentBridge component) {
+            implementedComponent = component;
+            // TODO ?
+            componentType = component.GetType();
         }
-        */
 
     }
 

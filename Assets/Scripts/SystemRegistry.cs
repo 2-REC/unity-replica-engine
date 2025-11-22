@@ -29,8 +29,8 @@ namespace ReplicaEngine {
         public GameEntityCollisionSystem gameEntityCollisionSystem;
         */
         public GameEntityFactory gameEntityFactory;
-        /*
         public GameEntityManager gameEntityManager;
+        /*
         public HitPointPool hitPointPool;
         public HotSpotSystem hotSpotSystem;
         public HudSystem hudSystem;

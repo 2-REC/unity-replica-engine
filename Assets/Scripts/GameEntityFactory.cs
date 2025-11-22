@@ -10,10 +10,13 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace ReplicaEngine {
 
-    public abstract class GameEntityFactory : BaseEntity {
+    // TODO: KEEP ABSTRACT?
+    //public abstract class GameEntityFactory : BaseEntity {
+    public class GameEntityFactory : BaseEntity {
 
         readonly static ComponentPoolComparator sComponentPoolComparator = new ComponentPoolComparator();
 
@@ -28,7 +31,9 @@ namespace ReplicaEngine {
         protected float mAlwaysActive;
 
 
-        protected class ComponentClass {
+        // TODO: keep protected?
+        //protected class ComponentClass {
+        public class ComponentClass {
             public Type type;
             public int poolSize;
 
@@ -59,7 +64,9 @@ namespace ReplicaEngine {
             mAlwaysActive = -1.0f;
         }
 
-        protected void SetComponentClasses(ComponentClass[] componentTypes) {
+        // TODO: keep protected?
+        //protected void SetComponentClasses(ComponentClass[] componentTypes) {
+        public void SetComponentClasses(ComponentClass[] componentTypes) {
             mComponentPools = new FixedSizeArray<GameComponentPool>(componentTypes.Length, sComponentPoolComparator);
             foreach (ComponentClass componentClass in componentTypes) {
                 mComponentPools.Add(new GameComponentPool(componentClass.type, componentClass.poolSize));
@@ -82,11 +89,19 @@ namespace ReplicaEngine {
             return pool;
         }
 
-        protected GameComponent AllocateComponent(Type componentType) {
-            GameComponentPool pool = GetComponentPool(componentType);
+        ////////////////////////////////
+        public GameEntity AllocateEntity() {
+            GameEntity gameEntity = mGameEntityPool.Allocate();
+            return gameEntity;
+        }
+        // TODO: ADD RELEASE! (+more?)
+        ////////////////////////////////
 
+        //protected GameComponent AllocateComponent(Type componentType) {
+        public GameComponent AllocateComponent(Type componentType) {
+            GameComponentPool pool = GetComponentPool(componentType);
             // TODO: exception?
-            //assert pool != null;
+            Assert.IsNotNull(pool, $"Pool of type {componentType.Name} not found!");
 
             GameComponent component = null;
             if (pool != null) {
@@ -95,11 +110,11 @@ namespace ReplicaEngine {
             return component;
         }
 
-        protected void ReleaseComponent(GameComponent component) {
+        //protected void ReleaseComponent(GameComponent component) {
+        public void ReleaseComponent(GameComponent component) {
             GameComponentPool pool = GetComponentPool(component.GetType());
-
             // TODO: exception?
-            //assert pool != null;
+            Assert.IsNotNull(pool, $"Pool of type {component.GetType().Name} not found!");
 
             if (pool != null) {
                 component.Reset();
@@ -111,9 +126,8 @@ namespace ReplicaEngine {
         protected bool ComponentAvailable(Type componentType, int count) {
             bool canAllocate = false;
             GameComponentPool pool = GetComponentPool(componentType);
-
-            // TODO: exception?
-            //assert pool != null;
+            // TODO: exception? (could return false instead)
+            Assert.IsNotNull(pool, $"Pool of type {componentType.Name} not found!");
 
             if (pool != null) {
                 //canAllocate = pool.GetAllocatedCount() + count < pool.GetSize();

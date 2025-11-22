@@ -98,6 +98,7 @@ namespace ReplicaEngine {
 ...            FixedSizeArray<BaseEntity> objects = getObjects();
             final int count = objects.getCount();
 
+            // TODO: rewrite to avoid going through inactive objects twice
             if (count > 0) {
                 final Object[] objectArray = objects.getArray();
                 for (int i = count - 1; i >= 0; i--) {
